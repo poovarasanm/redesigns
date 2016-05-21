@@ -23,13 +23,29 @@ if(request.getParameter("page") != null){
 start = pageNo * perPage;
 
 String query = "SELECT ";
-String conds = "";
+String conds = " WHERE 1=1";
 String joins = " FROM company_registration";
 String countQuery = "SELECT COUNT(CR_code_id)";
 
 query += "CR_code_id, CR_code, CR_name, CR_industry_type, CR_contact_person, CR_Address, CR_email_id";
 query += ", CR_phone_no, CR_mobile_no, CR_Website, CR_username, CR_payment_type";
 query += ", CR_deleted_flag, CR_act_deact, CR_date_time, CR_City, CR_State, CR_Country, CR_Zipcode";
+
+if(request.getParameter("pt") != null){ // payment type
+	if("1".equals((String)request.getParameter("pt")) || "2".equals((String)request.getParameter("pt"))){
+		conds += " AND CR_payment_type = " + (String)request.getParameter("pt");
+	}	
+}
+if(request.getParameter("s") != null){ // status
+	if("1".equals((String)request.getParameter("s")) || "2".equals((String)request.getParameter("s"))){
+		conds += " AND CR_act_deact = " + (String)request.getParameter("s");
+	}	
+}
+if(request.getParameter("d") != null){ // deleted
+	if("1".equals((String)request.getParameter("d"))){
+		conds += " AND CR_deleted_flag = 1";
+	}	
+}
 
 countQuery += (joins + conds);
 query += (joins + conds);
@@ -72,6 +88,15 @@ try {
 <html>
 <head>
   <%@ include file="./partials/head.jsp" %>
+  <style>
+	.fa-gift, .fa-close, .fa-trash {
+		color: red;
+	}
+	.fa-inr, .fa-check {
+		color: green;
+	}
+	
+  </style>
 </head>
 <body class="hold-transition skin-red sidebar-mini">
 <div class="wrapper">
