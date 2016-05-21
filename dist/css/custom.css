@@ -1,0 +1,14 @@
+form div.row {
+ margin-top: 8px;
+ margin-bottom: 8px
+}
+
+.actions i {
+	padding: 8px;
+    color: green;
+    font-size: 18px;
+}
+
+.actions input {
+
+}
