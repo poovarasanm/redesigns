@@ -198,30 +198,7 @@ try {
 		<input type="hidden" name="major" value="<%= request.getParameter("major") %>"/>
 		<input type="hidden" name="gender" value="<%= request.getParameter("gender") %>"/>
 		<input type="hidden" name="serviceType" value="<%= request.getParameter("serviceType") %>"/>
-		<input type="hidden" name="page" value="<% out.print(request.getParameter("page") == null ? "0" : request.getParameter("page"));  %>"/>
-		<% if(pages > 1) { %>
-		<div class="row">
-			<div class="col-md-8 btn-group" role="group">
-				<button type="submit" value="0" <% out.print((0==pageNo) ? "disabled":""); %> class="btn btn-default" onclick="document.search.page.value=0;">&lt;&lt;</button>
-				<button type="submit" <% out.print((0==pageNo) ? "disabled":""); %> onclick="document.search.page.value=<%= pageNo-1 %>;" class="btn btn-default">&lt;</button>
-				<% boolean dotDone = false; %>
-				<% for(int i=0; i < pages; i++) { %>
-					<% if(i < 4 || i >= pages - 4) { %>
-					<button type="submit" value="<%= pageNo %>" onclick="document.search.page.value=<%= i %>;" class="btn btn-default" <% out.print((i==pageNo) ? "disabled":""); %>><% out.print(i+1); %></button>
-					<% } else if(!dotDone) { %>
-					<% dotDone = true; %>
-					<button disabled class="btn btn-default">...</button>
-					<% } %>
-				<% }%>
-				<button type="submit" class="btn btn-default" onclick="document.search.page.value=<%= pageNo+1 %>;"
-				<% out.print((pages-1==pageNo) ? "disabled":""); %>>&gt;</button>
-				<button type="submit" class="btn btn-default" onclick="document.search.page.value=<%= pages-1 %>;"
-				<% out.print((pages-1==pageNo) ? "disabled":""); %> >&gt;&gt;</button>
-				<input type="text" class="btn btn-default" id="goto" style="width: 59px" placeholder="page#"/>
-				<button class="btn btn-default" onclick="document.search.page.value=document.getElementById('goto').value-1;">Go</button>
-			</div>
-		</div>
-		<% } %>
+		<%@ include file="./partials/pagination-form-part.jsp" %>
 		<div class="row btn-group">
 			<div class="col-md-12">
 				<button class="btn btn-default" id="selectAll">Select All</button>

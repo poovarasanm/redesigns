@@ -37,6 +37,14 @@ query += ", av_expire_flag, av_deleted_flag, av_status_flag, av_approved_by, av_
 query += ", av_company_address, av_company_emailid, av_company_mobile_no, av_company_phone_no, av_company_contact_city, av_company_contact_state";
 query += ", av_company_contact_coutry, av_candidatereq_qualification_major, post_type";
 
+if(request.getParameter("jt") != null && !"".equals(((String)request.getParameter("jt")).trim())){
+	if("2".equals((String)request.getParameter("jt"))) {
+		conds += " AND post_type = 'PAID_POST'";
+	} else if("1".equals((String)request.getParameter("jt"))) {
+		conds += " AND post_type = 'FREE_POST'";
+	}
+}
+
 countQuery += (joins + conds);
 query += (joins + conds);
 
@@ -103,30 +111,7 @@ try {
     <!-- Main content -->
     <section class="content">
 		<form action="/admin/jobs.jsp" method="post" name="search">
-		<input type="hidden" name="page" value="<% out.print(request.getParameter("page") == null ? "0" : request.getParameter("page"));  %>"/>
-		<% if(pages > 1) { %>
-		<div class="row">
-			<div class="col-md-8 btn-group" role="group">
-				<button type="submit" value="0" <% out.print((0==pageNo) ? "disabled":""); %> class="btn btn-default" onclick="document.search.page.value=0;">&lt;&lt;</button>
-				<button type="submit" <% out.print((0==pageNo) ? "disabled":""); %> onclick="document.search.page.value=<%= pageNo-1 %>;" class="btn btn-default">&lt;</button>
-				<% boolean dotDone = false; %>
-				<% for(int i=0; i < pages; i++) { %>
-					<% if(i < 4 || i >= pages - 4) { %>
-					<button type="submit" value="<%= pageNo %>" onclick="document.search.page.value=<%= i %>;" class="btn btn-default" <% out.print((i==pageNo) ? "disabled":""); %>><% out.print(i+1); %></button>
-					<% } else if(!dotDone) { %>
-					<% dotDone = true; %>
-					<button disabled class="btn btn-default">...</button>
-					<% } %>
-				<% }%>
-				<button type="submit" class="btn btn-default" onclick="document.search.page.value=<%= pageNo+1 %>;"
-				<% out.print((pages-1==pageNo) ? "disabled":""); %>>&gt;</button>
-				<button type="submit" class="btn btn-default" onclick="document.search.page.value=<%= pages-1 %>;"
-				<% out.print((pages-1==pageNo) ? "disabled":""); %> >&gt;&gt;</button>
-				<input type="text" class="btn btn-default" id="goto" style="width: 59px" placeholder="page#"/>
-				<button class="btn btn-default" onclick="document.search.page.value=document.getElementById('goto').value-1;">Go</button>
-			</div>
-		</div>
-		<% } %>
+		<%@ include file="./partials/pagination-form-part.jsp" %>
 		<div class="row btn-group">
 			<div class="col-md-12">
 				<button class="btn btn-default" id="activate">Activate</button>
@@ -174,6 +159,13 @@ try {
 			}
 			%></td>
 			<td title = "<%= qualification %>"><%= qualificationShort %></td>
+			<td>
+				<% if("approved".equals(rs.getString("av_status_flag"))) { %>
+				<label class="label label-success">approved</label>
+				<% } else if("rejected".equals(rs.getString("av_status_flag"))) { %>
+				<label class="label label-danger">rejected</label>
+				<% } %>
+			</td>
 		</tr>
 		<% } %>
 		</tbody>
